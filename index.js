@@ -1,6 +1,7 @@
 const express = require("express");
 const cors = require('cors')
 const app = express();
+const port = process.env.PORT || 3000
 
 app.options('*', cors()) // include before other routes
 app.use(cors())
@@ -56,6 +57,6 @@ app.post("/checkout", (req, res) => {
     res.json({ error: "user not found" })
 })
 
-app.listen(5000, () => {
+app.listen(port, () => {
     console.log("server started on port 4000");
 })
