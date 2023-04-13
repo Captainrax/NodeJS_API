@@ -7,6 +7,11 @@ app.use(cors())
 
 app.use(express.json());
 
+app.all('*',function (_,res,next) {
+  res.setHeader('Access-Control-Allow-Origin', '*');
+  next();
+});
+
 app.get("/users", (_, res) => {
     res.send(users);
 })
