@@ -1,5 +1,7 @@
-const express = require("express");
-const cors = require('cors')
+import { checkIn, checkOut, login, getEmployeeById, getAllEmployeesWithCheckInOut } from "./SQLHelper.js";
+import express from "express";
+import cors from "cors";
+
 const app = express();
 const port = process.env.PORT || 3000
 
@@ -13,50 +15,86 @@ app.all('*',function (_,res,next) {
   next();
 });
 
-app.get("/users", (_, res) => {
-    res.send(users);
-})
+// const employees = [ {
+// 	employeeID: 1,
+// 	employeeCode: "test",
+// 	checkedIn: 0,
+// 	check_in_time: "",
+// 	check_out_time: ""
+// } ];
 
-const users = [ {
-    username: "test",
-    password: "test",
-    checkedIn: false
-} ];
+// app.post("/postEmployee", (req, res) => {
+// 	const employee = req.body.employee;
 
-app.post("/postuser", (req, res) => {
-    const user = req.body.user;
+// 	employees.push({ employeeCode: employee.employeeCode });
 
-    users.push({ username: user.username, password: user.password });
-
-    console.log(users)
-
-    res.json({ loggedIn: true, status: "fuck" })
-})
+// 	res.json({ status: "newEmployeeCreated" })
+// })
 
 app.post("/checkin", (req, res) => {
-    const user = req.body.user;
-    for(let i = 0; i < users.length; i++) {
-        if(user.username == users[i].username) {
-            users[i].checkedIn = true;
-            res.json({ loggedIn: users[i].checkedIn })
-            return;
-        }
-    }
-    res.json({ error: "user not found" })
+	const employee = req.body.employee;
+	checkIn(employee.employeeID, employee.check_in_time, function(callback) {
+		if(callback !== null) {
+			return res.json({ checkedIn: 1, tableID: callback })
+		} else {
+			return res.status(400).send({
+				message: "Error"
+			});
+		} 
+	})
 })
 
 app.post("/checkout", (req, res) => {
-    const user = req.body.user;
-    for(let i = 0; i < users.length; i++) {
-        if(user.username == users[i].username) {
-            users[i].checkedIn = false;
-            res.json({ loggedIn: users[i].checkedIn })
-            return;
-        }
-    }
-    res.json({ error: "user not found" })
+	const employee = req.body.employee;
+	checkOut(employee.employeeID, employee.tableID, employee.check_out_time, function(callback) {
+		if(callback !== null) {
+			return res.json(callback)
+		} else {
+			return res.status(400).send({
+				message: "Error"
+			});
+		}
+	})
+})
+
+app.post("/employee", (req, res) => {
+	const employee = req.body.employee;
+	getEmployeeById(employee.employeeID, function(_, employee) {
+		if( employee !== null ) {
+			return res.json(employee)
+		} else {
+			return res.status(400).send({
+				message: "Error"
+			})
+		}
+	})
+})
+
+app.post("/login", (req, res) => {
+	const employee = req.body.employee;
+	login(employee.employeeCode, function(employeeID) {
+		if( employeeID !== null ) {
+			return res.json({ employeeID: employeeID })
+		} else {
+			return res.status(400).send({
+				message: "Error"
+			})
+		}
+	})
+})
+
+app.get("/getAllEmployees", (_, res) => {
+	getAllEmployeesWithCheckInOut(function(employees) {
+		if( employees !== null ) {
+			return res.json(employees)
+		} else {
+			return res.status(400).send({
+				message: "Error"
+			})
+		}
+	})
 })
 
 app.listen(port, () => {
-    console.log("server started on port 4000");
+	console.log("server started on port "+port);
 })
