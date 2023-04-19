@@ -35,9 +35,7 @@ export function checkIn(employeeID, check_in_time, callback) {
     }
   });
  
-
   db.close();
-  // if function succedes
   return true;
 }
 

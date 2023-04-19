@@ -1,4 +1,4 @@
-import { checkIn, checkOut, login, getEmployeeById, getAllEmployeesWithCheckInOut, getLatestCheckIn } from "./SQLHelper.js";
+import { checkIn, checkOut, login, getEmployeeById, getAllEmployeesWithCheckInOut, getLatestCheckIn } from "./sqlhelper.js";
 import express from "express";
 import cors from "cors";
 
@@ -14,22 +14,6 @@ app.all('*',function (_,res,next) {
   res.setHeader('Access-Control-Allow-Origin', '*');
   next();
 });
-
-// const employees = [ {
-// 	employeeID: 1,
-// 	employeeCode: "test",
-// 	checkedIn: 0,
-// 	check_in_time: "",
-// 	check_out_time: ""
-// } ];
-
-// app.post("/postEmployee", (req, res) => {
-// 	const employee = req.body.employee;
-
-// 	employees.push({ employeeCode: employee.employeeCode });
-
-// 	res.json({ status: "newEmployeeCreated" })
-// })
 
 app.post("/checkin", (req, res) => {
 	const employee = req.body.employee;

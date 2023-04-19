@@ -16,14 +16,14 @@ db.run(`
   if(error) {
     console.log(error.message)
   } else {
-    // Insert a new user into the users table
+    // Insert dummy employees into the employees table
     db.run(`
       INSERT INTO employees (employeeCode) VALUES ('alice'), ('andreas')`, 
       (err) => {
       if (err) {
         console.error(err.message);
       } else {
-        console.log('New user added to the database');
+        console.log('Dummy employees added to the database');
       }
     });
   }
@@ -33,9 +33,10 @@ db.run(`
 db.run(`
   CREATE TABLE IF NOT EXISTS check_ins_outs (
     id INTEGER PRIMARY KEY,
-    employeeID INTEGER NOT NULL,
+    employeeID INTEGER,
     check_in_time INTEGER NOT NULL,
-    check_out_time INTEGER
+    check_out_time INTEGER,
+    FOREIGN KEY(employeeID) REFERENCES employees(employeeID)
   )
 `);
 
