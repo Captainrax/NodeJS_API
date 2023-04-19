@@ -1,4 +1,4 @@
-import { checkIn, checkOut, login, getEmployeeById, getAllEmployeesWithCheckInOut } from "./SQLHelper.js";
+import { checkIn, checkOut, login, getEmployeeById, getAllEmployeesWithCheckInOut, getLatestCheckIn } from "./SQLHelper.js";
 import express from "express";
 import cors from "cors";
 
@@ -87,6 +87,19 @@ app.get("/getAllEmployees", (_, res) => {
 	getAllEmployeesWithCheckInOut(function(employees) {
 		if( employees !== null ) {
 			return res.json(employees)
+		} else {
+			return res.status(400).send({
+				message: "Error"
+			})
+		}
+	})
+})
+
+app.post("/getLatestCheckIn", (req, res) => {
+	const employee = req.body.employee;
+	getLatestCheckIn(employee.employeeID, function(tableID) {
+		if( tableID !== null ) {
+			return res.json({ tableID: tableID })
 		} else {
 			return res.status(400).send({
 				message: "Error"

@@ -165,3 +165,26 @@ export function getAllEmployeesWithCheckInOut(callback) {
   // if function succedes
   return true;
 }
+
+export function getLatestCheckIn(employeeID, callback) {
+  const db = new sqlite3.Database('employees.db');
+
+  db.get(`
+    SELECT id 
+    FROM check_ins_outs 
+    WHERE employeeID = ? AND check_out_time IS NULL 
+    ORDER BY check_in_time DESC 
+    LIMIT 1
+  `, [employeeID], (err, row) => {
+    if (err) {
+      console.error(err.message);
+      callback(null);
+    } else {
+      // Send the result as JSON
+      callback(row);
+    }
+  }); 
+  db.close();
+  // if function succedes
+  return true;
+}
