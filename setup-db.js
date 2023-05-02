@@ -18,7 +18,7 @@ db.run(`
   } else {
     // Insert dummy employees into the employees table
     db.run(`
-      INSERT INTO employees (employeeCode) VALUES ('alice'), ('andreas')`, 
+      INSERT INTO employees (name, employeeCode) VALUES ('Alice', '1111'), ('Andreas', '2222')`, 
       (err) => {
       if (err) {
         console.error(err.message);
