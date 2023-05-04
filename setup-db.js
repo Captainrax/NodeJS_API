@@ -8,7 +8,7 @@ const db = new sqlite3.Database('employees.db');
 db.run(`
   CREATE TABLE IF NOT EXISTS employees (
     employeeID INTEGER PRIMARY KEY,
-    employeeCode TEXT NOT NULL,
+    employeeCode TEXT NOT NULL UNIQUE,
     name TEXT,
     checkedIn INTEGER DEFAULT 0
   )

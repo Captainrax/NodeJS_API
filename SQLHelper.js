@@ -186,3 +186,23 @@ export function getLatestCheckIn(employeeID, callback) {
   // if function succedes
   return true;
 }
+
+export function createEmployee(employeeCode, name, callback) {
+  const db = new sqlite3.Database('employees.db');
+
+  db.run(`
+    INSERT INTO employees(employeeCode, name) VALUES (?, ?) 
+    `, [employeeCode, name] ,function(error) {
+    if (error) {
+      console.log(error.message);
+      callback(error);
+    } else {
+      // Update the checkedin column in the users table
+      console.log("employee created")
+      callback("employee created")
+    }
+  });
+ 
+  db.close();
+  return true;
+}
