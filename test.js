@@ -6,7 +6,7 @@ import { describe, it } from "mocha";
 
 describe('login', function() {
   it('should return employeeID for a valid employee code', function(done) {
-    const employeeCode = 'alice';
+    const employeeCode = '1111';
     login(employeeCode, function(employeeID) {
       assert.strictEqual(employeeID, 1);
       done();
@@ -14,7 +14,7 @@ describe('login', function() {
   });
 
   it('should return null for an invalid employee code', function(done) {
-    const employeeCode = 'bob';
+    const employeeCode = '11111';
     login(employeeCode, function(employeeID) {
       assert.strictEqual(employeeID, null);
       done();
